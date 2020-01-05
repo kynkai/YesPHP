@@ -1,0 +1,14 @@
+{
+    "name": "kynkai/yesphp",
+    "description": "Base class, Manager Object and Logic Coding",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "haoquach",
+            "email": "quachvanhao@cmnd.vn"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
