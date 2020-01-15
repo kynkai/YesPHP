@@ -1,4 +1,59 @@
 <?php
+use Yes\ArrayNode;
+use Yes\Node\ObjectInstanceNode;
+use Yes\Node\Node;
+
+function defaultArrayNode(){
+
+    $arrayNode = new ArrayNode([
+        ObjectInstanceNode::class,
+        Node::class
+    ]);
+
+    return $arrayNode;
+
+}
+
+function array_walk_recursive_array(array &$array, callable $callback) {
+    foreach ($array as $k => &$v) {
+        if (is_array($v)) {
+            array_walk_recursive_array($v, $callback);
+        } else {
+            $callback($v, $k, $array);
+        }
+    }
+}
+
+
+function nnew($data){
+
+    $instance = null;
+
+    if(is_array($data) && count($data) > 0 && isset($data[0])){
+
+        $class = $data[0];
+
+        if(is_string($class) && class_exists($class)){
+
+            $class = new \ReflectionClass($class);
+
+            if($class){
+
+                array_shift($data);
+            
+                $instance = $class->newInstanceArgs($data);
+        
+            }
+
+        } 
+
+    }
+
+    if($instance) return $instance;
+
+    return $data;
+
+}
 
 function toString($ob){
 
@@ -44,7 +99,7 @@ function x($i = 0){
 
     $a = generateCallTrace(false,$i);
 
-    return str_replace(ABSPATH,"",$a);
+    //return @str_replace(ABSPATH,"",$a);
 
 }
 

@@ -1,6 +1,7 @@
 {
     "name": "kynkai/yesphp",
     "description": "Base class, Manager Object and Logic Coding",
+    "keywords": ["php,base"],
     "type": "library",
     "license": "MIT",
     "authors": [
