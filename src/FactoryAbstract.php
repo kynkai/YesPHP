@@ -30,6 +30,12 @@ abstract class FactoryAbstract extends I2terator {
         $this->partners = $partners;
     }
 
+    public function getProductName(){
+
+        return $this->product_name;
+        
+    }
+
     protected function _create($args){
 
         if($s = ($this->product_name)::arrayTo($args)){
