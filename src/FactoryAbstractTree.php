@@ -16,9 +16,9 @@ class FactoryAbstractTree extends FactoryAbstract{
 
                 $me->product_name = $this->product_name;
 
-                $unit->child = $me;
+                $unit->setChild($me);
 
-                $unit->child->raiseAdd($child);
+                $unit->getChild()->raiseAdd($child);
 
                 return $unit;
 
@@ -27,4 +27,10 @@ class FactoryAbstractTree extends FactoryAbstract{
         }
 
     }
+
+    public function find($id){
+
+        return parent::find($id);
+    }
+
 }

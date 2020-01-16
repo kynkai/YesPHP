@@ -8,9 +8,27 @@ abstract class FactoryAbstract extends I2terator {
 
     public $active;
 
-    public const FIND_FAIL = "FIND_FAIL";
+    private $partners;
 
-    public function __construct(){}
+    public function __construct($partners = [])
+    {
+        $partners = defaultArrayNode()->extract($partners);
+
+        foreach ($partners as $key => $value) {
+            
+            if($value instanceof FactoryAbstract && $value->getProductName() == $this->product_name){
+
+
+            }else{
+
+                unset($partners[$key]);
+
+            }
+
+        }
+
+        $this->partners = $partners;
+    }
 
     protected function _create($args){
 
@@ -22,7 +40,7 @@ abstract class FactoryAbstract extends I2terator {
 
     }
 
-    public function getId($unit){
+    public function getIdUnit($unit){
 
         return !method_exists($unit,"getId") ?: $unit->getId();
 
@@ -72,7 +90,7 @@ abstract class FactoryAbstract extends I2terator {
 
             foreach ($units as $key => $value) {
 
-               if($this->getId($value)){
+               if($this->getIdUnit($value)){
 
                    $this->add($value);
 
@@ -98,7 +116,7 @@ abstract class FactoryAbstract extends I2terator {
 
         if(($unit = $this->parseUnit($unit,$id)) && \is_a($unit,$this->product_name)){
 
-            $this->var[$id ?: $this->getId($unit)] = $unit;
+            $this->var[$id ?: $this->getIdUnit($unit)] = $unit;
 
             return $unit;
         };
@@ -120,7 +138,7 @@ abstract class FactoryAbstract extends I2terator {
 
     public function find($id){
 
-        if(\array_key_exists($id,$this->var)){
+        if(isset($this->var[$id])){
 
             return $this->var[$id];
 
@@ -130,6 +148,96 @@ abstract class FactoryAbstract extends I2terator {
         }
 
         return false;
+
+    }
+
+    public function findHavy($unit){
+
+        foreach ($this as $key => $value) {
+           
+            if($value == $unit)  return $this[$key];
+
+        }
+
+    }
+
+    public function get($id){
+
+        $unit = $this->find($id);
+
+        $unit && $this->partnerOvertime($unit);
+
+        return $unit;
+
+    }
+
+    public function gets(){
+
+        $units = array_merge($this->creates(), $this->partnerCreates());
+
+        return $units;
+
+    }
+
+    public function creates(): array{
+
+        return [];
+
+    }
+
+    public function partnerCreates() : array{
+
+        $units = [];
+
+        if(count($this->partners)>0){
+
+            foreach ($this->partners as $key => $value) {
+    
+                $units = array_merge($units,$value->creates());
+
+            }
+
+        }
+
+        return $units;
+
+    }
+
+    public function partnerOvertime(&$unit){
+
+        $this->overtime($unit);
+
+        if(count($this->partners)>0){
+
+            foreach ($this->partners as $key => $value) {
+    
+                $value->partnerOvertime($unit);
+
+            }
+
+            if(!$unit) return;
+
+            foreach ($this->partners as $key => $value) {
+    
+                $value->alonePartner($unit);
+
+            }
+
+            $this->alonePartner($unit);
+
+        }
+
+    }
+
+    public function alonePartner($unit){
+
+
+
+    }
+
+    public function overtime(&$unit){
+
+        return $unit;
 
     }
 

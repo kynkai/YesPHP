@@ -90,15 +90,13 @@ class I2terator extends Entity implements \Iterator, \Countable
 
     public static function __set_state($an_array)
     {
-        $obj = new A;
-        $obj->var1 = $an_array['var1'];
 
-        return $obj;
     }
 
     public function __debugInfoo() {
 
         //return $this;
+
     }
 
     public function __call($name, $arguments)
@@ -131,6 +129,12 @@ class I2terator extends Entity implements \Iterator, \Countable
     {
         return count($this->var);
     } 
+
+    public function clears(){
+
+        $this->var = [];
+
+    }
 
     public static function canLoop($var){
 

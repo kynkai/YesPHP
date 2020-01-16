@@ -2,6 +2,7 @@
 use Yes\ArrayNode;
 use Yes\Node\ObjectInstanceNode;
 use Yes\Node\Node;
+use Yes\I2terator;
 
 function defaultArrayNode(){
 
@@ -13,6 +14,68 @@ function defaultArrayNode(){
     return $arrayNode;
 
 }
+
+function isGzipped($in) {
+    if (mb_strpos($in , "\x1f" . "\x8b" . "\x08")===0) {
+      return true;
+    } else if (@gzuncompress($in)!==false) {
+      return true;
+    } else if (@gzinflate($in)!==false) {
+      return true;
+    } else {
+      return false;
+    }
+}
+
+function take($begin,$end,$content){
+
+    $pos_0 = strpos($content, $begin); 
+
+    $content = substr($content,$pos_0 + strlen($begin));
+
+    $pos_0 = strrpos($content, $end); 
+
+    $content = substr($content,0,$pos_0);
+
+    return $content;
+
+}
+
+function findFiles($directory, $extensions = array()) {
+    function glob_recursive($directory, &$directories = array()) {
+        foreach(glob($directory, GLOB_ONLYDIR | GLOB_NOSORT) as $folder) {
+            $directories[] = $folder;
+            glob_recursive("{$folder}/*", $directories);
+        }
+    }
+    glob_recursive($directory, $directories);
+    $files = array ();
+    foreach($directories as $directory) {
+        foreach($extensions as $extension) {
+            foreach(glob("{$directory}/*.{$extension}") as $file) {
+                $files[$extension][] = $file;
+            }
+        }
+    }
+    return $files;
+  }
+
+  function I2terator_walk_recursive(I2terator $unit,$callback){
+
+    foreach ($unit as $key => $value) {
+  
+       if($value instanceof I2terator){
+  
+          I2terator_walk_recursive($value,$callback);
+  
+       }
+  
+       $callback($key,$value);
+  
+  
+    }
+  
+  }
 
 function array_walk_recursive_array(array &$array, callable $callback) {
     foreach ($array as $k => &$v) {
