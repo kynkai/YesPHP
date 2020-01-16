@@ -19,7 +19,5 @@
     },
     "autoload-dev": {
         "psr-4": {"Yes\\": "tests"}
-    },
-    "prefer-stable": true,
-    "minimum-stability": "dev"
+    }
 }
