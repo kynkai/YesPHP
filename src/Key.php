@@ -29,5 +29,10 @@ interface Key{
 
     public const REQUIRE = "REQUIRE";
 
+    public const MAX = "max";
+
+    public const CACHE = "cache";
+
+    public const MIN = "min";
 
 }
